@@ -2,9 +2,13 @@ package org.springboot.blogapp.service.impl;
 
 import org.springboot.blogapp.entity.Post;
 import org.springboot.blogapp.payload.PostDto;
+import org.springboot.blogapp.payload.PostResponse;
 import org.springboot.blogapp.repository.PostRepository;
 import org.springboot.blogapp.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,9 +33,19 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> getAllPosts(){
-        List<PostDto> posts = postRepository.findAll().stream().map(post -> mapToDto(post)).collect(Collectors.toList());
-        return posts;
+    public PostResponse getAllPosts(int pageNo, int pageSize){
+        // create Pageable instance
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<Post> allPosts = postRepository.findAll(pageable);
+        List<PostDto> content = allPosts.stream().map((post)->mapToDto(post)).toList();
+        PostResponse postResponse = new PostResponse();
+        postResponse.setContent(content);
+        postResponse.setPageNo(allPosts.getNumber());
+        postResponse.setPageSize(allPosts.getSize());
+        postResponse.setLast(allPosts.isLast());
+        postResponse.setTotalPages(allPosts.getTotalPages());
+        postResponse.setTotalElements(allPosts.getNumberOfElements());
+        return postResponse;
     }
 
     @Override

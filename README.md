@@ -1,6 +1,5 @@
 # Blog-Microservices
 
-![img.png](img.png)
 
 ## Description
 This project is a simple microservices project that uses Spring Boot, Spring Cloud, and Docker. The project is divided into three services: blog-service, user-service, and comment-service. The blog-service is responsible for creating and retrieving blog posts. The user-service is responsible for creating and retrieving users. The comment-service is responsible for creating and retrieving comments. The services communicate with each other using REST APIs. The project uses Eureka for service discovery and Ribbon for client-side load balancing. The project uses Docker to containerize the services.
